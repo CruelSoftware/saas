@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block head_title %}SaaS {{ block.super }}{% endblock head_title %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.css"  rel="stylesheet" />
+    {% include 'base/css.html' %}
 </head>
 <body>
     <h1>{{ page_title }}</h1>
-
+    {% include 'nav/navbar.html' %}
     {% block content%}
-
-    {% endblock content%}
-    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
+    {% endblock content %}
+    {% include 'base/js.html' %}
 </body>
 </html>
