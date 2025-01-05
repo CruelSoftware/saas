@@ -36,7 +36,6 @@ if DEBUG is True:
     ]
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -45,8 +44,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # internal
     'cli',
     'visits',
+
+    # thirdparty
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.github',
 ]
 
 MIDDLEWARE = [
@@ -57,6 +63,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -122,6 +129,33 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Django Allauth config
+ACCOUNT_AUTHENTICATION_METHOD='username_email'
+ACCOUNT_EMAIL_REQUIRED=True
+ACCOUNT_EMAIL_VERIFICATION='mandatory'
+LOGIN_REDIRECT_URL = '/'
+ACCOUNT_EMAIL_SUBJECT_PREFIX='SaaS'
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by email
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+# Provider specific settings
+SOCIALACCOUNT_PROVIDERS = {
+    # 'google': {
+    #     # For each OAuth based provider, either add a ``SocialApp``
+    #     # (``socialaccount`` app) containing the required client
+    #     # credentials, or list them here:
+    #     'APP': {
+    #         'client_id': '123',
+    #         'secret': '456',
+    #         'key': ''
+    #     }
+    # }
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/

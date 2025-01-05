@@ -1,4 +1,5 @@
 Django>=5.1,<5.2
+django-allauth[socialaccount]
 dj-database-url
 gunicorn
 psycopg[binary]
