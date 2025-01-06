@@ -2,12 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block head_title %}SaaS {{ block.super }}{% endblock head_title %}</title>
+    <title>{% block head_title %}SaaS{{ block.super }}{% endblock head_title %}</title>
     {% include 'base/css.html' %}
 </head>
 <body>
     <h1>{{ page_title }}</h1>
     {% include 'nav/navbar.html' %}
+    {% include 'base/messages.html' with messages=messages %}
     {% block content%}
     {% endblock content %}
     {% include 'base/js.html' %}

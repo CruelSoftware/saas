@@ -1,8 +1,11 @@
 Django>=5.1,<5.2
 django-allauth[socialaccount]
+django-allauth-ui
+django-widget-tweaks
 dj-database-url
 gunicorn
 psycopg[binary]
 python-decouple
 requests
+slippers
 whitenoise
