@@ -25,6 +25,55 @@ SECRET_KEY = config("DJANGO_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DJANGO_DEBUG", cast=bool)
 
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'console': {
+#             'class': 'logging.StreamHandler',
+#         },
+#     },
+#     'loggers': {
+#         'allauth': {
+#             'handlers': ['console'],
+#             'level': 'DEBUG',
+#         },
+#         # Optionally log OAuthlib for even more detail
+#         'oauthlib': {
+#             'handlers': ['console'],
+#             'level': 'DEBUG',
+#         },
+#     },
+# }
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'allauth': {
+            'handlers': ['console'],
+            'level': 'DEBUG',  # critical for seeing internal allauth errors
+            'propagate': True,
+        },
+        'oauthlib': {
+            'handlers': ['console'],
+            'level': 'DEBUG',  # reveals OAuth handshake issues
+            'propagate': True,
+        },
+        # Optionally, see all Django logs in console
+        'django': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+
 ALLOWED_HOSTS = [
     ".railway.app", # https://mysaas.railway.app
 ]
@@ -35,6 +84,8 @@ if DEBUG is True:
         "localhost",
     ]
 
+SITE_ID = 1
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -43,6 +94,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
 
     # internal
     'cli',
@@ -56,7 +108,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.github',
 
-    'slippers'
+    'slippers',
 ]
 
 MIDDLEWARE = [
@@ -138,7 +190,7 @@ ALLAUTH_UI_THEME = "light"
 
 ACCOUNT_AUTHENTICATION_METHOD='username_email'
 ACCOUNT_EMAIL_REQUIRED=True
-ACCOUNT_EMAIL_VERIFICATION='mandatory'
+ACCOUNT_EMAIL_VERIFICATION='none'
 LOGIN_REDIRECT_URL = '/'
 ACCOUNT_EMAIL_SUBJECT_PREFIX='SaaS'
 AUTHENTICATION_BACKENDS = [
@@ -160,6 +212,22 @@ SOCIALACCOUNT_PROVIDERS = {
     #         'secret': '456',
     #         'key': ''
     #     }
+    # }
+    'github': {
+        'VERIFIED_EMAIL': True,
+        'SCOPE': [
+            'user',
+            'read:org',
+            'repo',
+            'user:email'
+            # add other scopes you need
+        ],
+        'AUTH_PARAMS': {
+            'allow_signup': 'true'
+        }
+    }
+    # 'github': {
+    #
     # }
 }
 
@@ -223,3 +291,6 @@ if all([ADMIN_USER_NAME, ADMIN_USER_EMAIL]):
         (f'{ADMIN_USER_NAME}', f'{ADMIN_USER_EMAIL}')
     ]
     MANAGERS=ADMINS
+
+
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000', 'http://localhost:8000']
